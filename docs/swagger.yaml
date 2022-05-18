@@ -1,0 +1,16 @@
+basePath: /api/v1
+host: localhost:8080
+info:
+  contact:
+    email: sntshkmr60@gmail.com
+    name: Santosh Kumar
+    url: https://twitter.com/sntshk
+  description: A book management service API in Go using Gin framework.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://tos.santoshk.dev
+  title: Gin Book Service
+  version: "1.0"
+paths: {}
+swagger: "2.0"

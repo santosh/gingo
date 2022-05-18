@@ -1,0 +1,21 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "A book management service API in Go using Gin framework.",
+        "title": "Gin Book Service",
+        "termsOfService": "https://tos.santoshk.dev",
+        "contact": {
+            "name": "Santosh Kumar",
+            "url": "https://twitter.com/sntshk",
+            "email": "sntshkmr60@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {}
+}
