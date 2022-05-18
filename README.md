@@ -2,12 +2,12 @@
 
 ## Roadmap
 
-1. Gin
-2. Gin + REST
-3. Gin + REST + Tests
-4. Gin + REST + Tests + Auth
-5. Gin + REST + Tests + Auth + Postgres
-6. Gin + REST + Tests + Auth + Postgres + Swagger
-7. Gin + REST + Tests + Auth + Postgres + Swagger + GraphQL
+- [x] Gin
+- [x] Gin + REST
+- [x] Gin + REST + Tests
+- [ ] Gin + REST + Tests + Auth
+- [ ] Gin + REST + Tests + Auth + Postgres
+- [ ] Gin + REST + Tests + Auth + Postgres + Swagger
+- [ ] Gin + REST + Tests + Auth + Postgres + Swagger + GraphQL
 
 <!-- gin swagger -->
