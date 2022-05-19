@@ -1,13 +1,14 @@
 # gingo
 
+Toy project to demonstration working solution of Gin, REST, Unit tests, Swagger UI, Postgres, Authentication and GraphQL in oschestration.
+
 ## Roadmap
 
 - [x] Gin
 - [x] Gin + REST
 - [x] Gin + REST + Tests
-- [ ] Gin + REST + Tests + Auth
-- [ ] Gin + REST + Tests + Auth + Postgres
-- [ ] Gin + REST + Tests + Auth + Postgres + Swagger
-- [ ] Gin + REST + Tests + Auth + Postgres + Swagger + GraphQL
+- [x] Gin + REST + Tests + Swagger
+- [ ] Gin + REST + Tests + Swagger + Auth
+- [ ] Gin + REST + Tests + Swagger + Auth + Postgres
+- [ ] Gin + REST + Tests + Swagger + Auth + Postgres + GraphQL
 
-<!-- gin swagger -->
