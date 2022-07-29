@@ -1,6 +1,6 @@
 # gingo
 
-Toy project to demonstration working solution of Gin, REST, Unit tests, Swagger UI, Postgres, Authentication and GraphQL in oschestration.
+Toy project to demonstration working solution of Gin, REST, Unit tests, Swagger UI, SQL, Authentication and GraphQL in oschestration.
 
 ## Roadmap
 
