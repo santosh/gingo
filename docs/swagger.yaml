@@ -58,6 +58,22 @@ paths:
       tags:
       - books
   /books/{isbn}:
+    delete:
+      description: Delete a single entry from the database based on isbn.
+      parameters:
+      - description: delete book by isbn
+        in: path
+        name: isbn
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+      summary: Remove single book by isbn
+      tags:
+      - books
     get:
       description: Returns the book whose ISBN value matches the isbn.
       parameters:
@@ -74,6 +90,25 @@ paths:
           schema:
             $ref: '#/definitions/models.Book'
       summary: Get single book by isbn
+      tags:
+      - books
+    put:
+      description: Updates and returns a single book whose ISBN value matches the
+        isbn. New data must be passed in the body.
+      parameters:
+      - description: update book by isbn
+        in: path
+        name: isbn
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Book'
+      summary: Update single book by isbn
       tags:
       - books
 swagger: "2.0"

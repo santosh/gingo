@@ -16,7 +16,16 @@ import (
 // @Success      200  {array}  models.Book
 // @Router       /books [get]
 func GetBooks(c *gin.Context) {
-	c.JSON(http.StatusOK, db.Books)
+	var books []models.Book
+
+	if result := db.DB.Find(&books); result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": result.Error.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, &books)
 }
 
 // PostBook		 godoc
@@ -36,9 +45,14 @@ func PostBook(c *gin.Context) {
 		return
 	}
 
-	// Add the new book to the slice.
-	db.Books = append(db.Books, newBook)
-	c.JSON(http.StatusCreated, newBook)
+	if result := db.DB.Create(&newBook); result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": result.Error.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusCreated, &newBook)
 }
 
 // GetBookByISBN		 godoc
@@ -50,19 +64,63 @@ func PostBook(c *gin.Context) {
 // @Success      200  {object}  models.Book
 // @Router       /books/{isbn} [get]
 func GetBookByISBN(c *gin.Context) {
-	isbn := c.Param("isbn")
+	var book models.Book
 
-	// Loop over the list of books, look for
-	// an book whose ISBN value matches the parameter.
-	for _, a := range db.Books {
-		if a.ISBN == isbn {
-			c.JSON(http.StatusOK, a)
-			return
-		}
+	if err := db.DB.Where("isbn = ?", c.Param("isbn")).First(&book).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
 	}
-	c.JSON(http.StatusNotFound, gin.H{"message": "book not found"})
+
+	c.JSON(http.StatusOK, &book)
 }
 
-// func DeleteBookByISBN(c *gin.Context) {}
+// DeleteBookByISBN		 godoc
+// @Summary      Remove single book by isbn
+// @Description  Delete a single entry from the database based on isbn.
+// @Tags         books
+// @Produce      json
+// @Param        isbn  path      string  true  "delete book by isbn"
+// @Success      204
+// @Router       /books/{isbn} [delete]
+func DeleteBookByISBN(c *gin.Context) {
+	id := c.Param("isbn")
 
-// func UpdateBookByISBN(c *gin.Context) {}
+	if result := db.DB.Delete(&models.Book{}, id); result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": result.Error.Error(),
+		})
+		return
+	}
+
+	c.Status(http.StatusNoContent)
+}
+
+// UpdateBookByISBN		 godoc
+// @Summary      Update single book by isbn
+// @Description  Updates and returns a single book whose ISBN value matches the isbn. New data must be passed in the body.
+// @Tags         books
+// @Produce      json
+// @Param        isbn  path      string  true  "update book by isbn"
+// @Success      200  {object}  models.Book
+// @Router       /books/{isbn} [put]
+func UpdateBookByISBN(c *gin.Context) {
+	// Get model if exist
+	var book models.Book
+	var bookUpdate models.Book
+
+	// pull the specific book intry in &book
+	if err := db.DB.Where("isbn = ?", c.Param("isbn")).First(&book).Error; err != nil {
+		c.AbortWithStatus(404)
+		return
+	}
+
+	// get new data from body
+	if err := c.ShouldBindJSON(&bookUpdate); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// update and return new body
+	db.DB.Model(&book).Where("isbn = ?", c.Param("isbn")).Updates(&bookUpdate)
+	c.JSON(http.StatusOK, &book)
+}

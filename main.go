@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/santosh/gingo/db"
 	_ "github.com/santosh/gingo/docs"
 	"github.com/santosh/gingo/routes"
 	swaggerFiles "github.com/swaggo/files"
@@ -23,6 +24,8 @@ import (
 // @BasePath  /api/v1
 func main() {
 	router := routes.SetupRouter()
+
+	db.ConnectDatabase()
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run(":8090")
