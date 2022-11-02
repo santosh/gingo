@@ -1,6 +1,9 @@
 package main
 
 import (
+	"sync"
+	"time"
+
 	"github.com/santosh/gingo/db"
 	_ "github.com/santosh/gingo/docs"
 	"github.com/santosh/gingo/routes"
@@ -23,6 +26,18 @@ import (
 // @host      localhost:8080
 // @BasePath  /api/v1
 func main() {
+	wg := new(sync.WaitGroup)
+	wg.Add(1)
+
+	go startServer(wg)
+
+	// wait for server to start properly before seeding db
+	time.Sleep(time.Second * 2)
+	db.Seed()
+	wg.Wait()
+}
+
+func startServer(wg *sync.WaitGroup) {
 	router := routes.SetupRouter()
 
 	db.ConnectDatabase()
