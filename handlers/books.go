@@ -1,12 +1,23 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/santosh/gingo/db"
+	"github.com/santosh/gingo/logger"
 	"github.com/santosh/gingo/models"
+	"go.uber.org/zap"
 )
+
+var zlog *zap.Logger
+
+func init() {
+	zlog = logger.Log.With(
+		zap.String("package", "handlers"),
+	)
+}
 
 // GetBooks		 godoc
 // @Summary      Get books array
@@ -24,6 +35,8 @@ func GetBooks(c *gin.Context) {
 		})
 		return
 	}
+
+	zlog.Info("GETting all books")
 
 	c.JSON(http.StatusOK, &books)
 }
@@ -52,6 +65,8 @@ func PostBook(c *gin.Context) {
 		return
 	}
 
+	zlog.Info(fmt.Sprintf("POSTing new book with ISBN: %s", newBook.ISBN))
+
 	c.JSON(http.StatusCreated, &newBook)
 }
 
@@ -70,6 +85,8 @@ func GetBookByISBN(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
+
+	zlog.Info(fmt.Sprintf("GET request for book: %s", book.ISBN))
 
 	c.JSON(http.StatusOK, &book)
 }
@@ -91,6 +108,8 @@ func DeleteBookByISBN(c *gin.Context) {
 		})
 		return
 	}
+
+	zlog.Info(fmt.Sprintf("DELETE request for book: %s", id))
 
 	c.Status(http.StatusNoContent)
 }
@@ -119,6 +138,8 @@ func UpdateBookByISBN(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	zlog.Info(fmt.Sprintf("PUT request for book: %s", book.ISBN))
 
 	// update and return new body
 	db.DB.Model(&book).Where("isbn = ?", c.Param("isbn")).Updates(&bookUpdate)

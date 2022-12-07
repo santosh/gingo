@@ -12,7 +12,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-
 func TestBooksRoute(t *testing.T) {
 	router := routes.SetupRouter()
 
@@ -37,14 +36,13 @@ func TestBooksbyISBNRoute(t *testing.T) {
 	assert.Contains(t, w.Body.String(), "Rich Dad Poor Dad")
 }
 
-
 func TestPostBookRoute(t *testing.T) {
 	router := routes.SetupRouter()
 
 	book := models.Book{
-		ISBN: "1234567891012",
+		ISBN:   "1234567891012",
 		Author: "Santosh Kumar",
-		Title: "Hello World",
+		Title:  "Hello World",
 	}
 
 	body, _ := json.Marshal(book)
