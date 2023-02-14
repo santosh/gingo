@@ -8,6 +8,8 @@ import (
 	"github.com/santosh/gingo/db"
 	"github.com/santosh/gingo/logger"
 	"github.com/santosh/gingo/models"
+	"github.com/santosh/gingo/telemetry"
+	"go.opentelemetry.io/otel"
 	"go.uber.org/zap"
 )
 
@@ -27,6 +29,9 @@ func init() {
 // @Success      200  {array}  models.Book
 // @Router       /books [get]
 func GetBooks(c *gin.Context) {
+	_, span := otel.Tracer(telemetry.AppName).Start(c, "GET /books")
+	defer span.End()
+
 	var books []models.Book
 
 	if result := db.DB.Find(&books); result.Error != nil {
@@ -50,6 +55,8 @@ func GetBooks(c *gin.Context) {
 // @Success      200   {object}  models.Book
 // @Router       /books [post]
 func PostBook(c *gin.Context) {
+	_, span := otel.Tracer(telemetry.AppName).Start(c, "POST /books")
+	defer span.End()
 	var newBook models.Book
 
 	// Call BindJSON to bind the received JSON to
@@ -79,6 +86,9 @@ func PostBook(c *gin.Context) {
 // @Success      200  {object}  models.Book
 // @Router       /books/{isbn} [get]
 func GetBookByISBN(c *gin.Context) {
+	_, span := otel.Tracer(telemetry.AppName).Start(c, "GET /books/:isbn")
+	defer span.End()
+
 	var book models.Book
 
 	if err := db.DB.Where("isbn = ?", c.Param("isbn")).First(&book).Error; err != nil {
@@ -100,6 +110,9 @@ func GetBookByISBN(c *gin.Context) {
 // @Success      204
 // @Router       /books/{isbn} [delete]
 func DeleteBookByISBN(c *gin.Context) {
+	_, span := otel.Tracer(telemetry.AppName).Start(c, "DELETE /books")
+	defer span.End()
+
 	id := c.Param("isbn")
 
 	if result := db.DB.Delete(&models.Book{}, id); result.Error != nil {
@@ -123,6 +136,9 @@ func DeleteBookByISBN(c *gin.Context) {
 // @Success      200  {object}  models.Book
 // @Router       /books/{isbn} [put]
 func UpdateBookByISBN(c *gin.Context) {
+	_, span := otel.Tracer(telemetry.AppName).Start(c, "PUT /books")
+	defer span.End()
+
 	// Get model if exist
 	var book models.Book
 	var bookUpdate models.Book
